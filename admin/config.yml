@@ -1,0 +1,646 @@
+backend:
+  name: git-gateway
+  accept_roles:
+    - admin
+    - editor
+media_folder: theme/assets/images
+public_folder: /assets/images
+collections:
+  - name: pages
+    label: Pages
+    identifier_field: title
+    extension: md
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    folder: cms/pages
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '{{slug}}.html'
+      - &ref_0
+        label: Seo
+        name: seo
+        widget: object
+        collapsed: true
+        fields:
+          - label: Title
+            name: title
+            widget: string
+            required: false
+          - label: Description
+            name: description
+            widget: string
+            required: false
+          - label: No index
+            name: noindex
+            widget: boolean
+            default: false
+            required: false
+          - label: Open Graph Title
+            name: og:title
+            widget: string
+            required: false
+          - label: Open Graph Image
+            name: og:image
+            widget: image
+            required: false
+            media_library:
+              config:
+                multiple: false
+          - label: Twitter Title
+            name: twitter:title
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Card
+            name: twitter:card
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Site
+            name: twitter:site
+            widget: string
+            required: false
+          - label: Twitter Creator
+            name: twitter:creator
+            widget: string
+            required: false
+          - label: Additional HTML tags
+            name: additional_tags
+            widget: text
+            required: false
+  - name: projects
+    label: Projects
+    folder: cms/projects
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Project Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Project Details
+        name: body
+        widget: markdown
+        required: false
+      - hint: ''
+        name: f_brief-project-description
+        label: Brief Project Description
+        widget: string
+        required: false
+      - hint: ''
+        name: f_project-image
+        label: Project Image
+        widget: object
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_project-colour
+        label: Project Colour
+        widget: color
+        required: false
+        enableAlpha: true
+        allowInput: true
+      - hint: ''
+        name: f_project-year
+        label: Project Year
+        widget: string
+        required: false
+      - hint: ''
+        name: f_client-name
+        label: Client Name
+        widget: string
+        required: false
+      - hint: ''
+        name: f_project-type-1
+        label: Project Type
+        widget: select
+        required: false
+        options:
+          - label: UX design
+            value: UX design
+          - label: Web design
+            value: Web design
+          - label: Prototyping
+            value: Prototyping
+      - hint: ''
+        name: f_project-link
+        label: Project Link
+        widget: string
+        required: false
+      - hint: ''
+        name: f_project-images
+        label: Project Images
+        widget: list
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: projects
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[projects].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - label: Theme Settings
+    name: settings
+    identifier_field: title
+    extension: json
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    files:
+      - label: General
+        name: site
+        file: cms/_data/settings/site.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: General
+          - hint: Full domain url (needed for a correct sitemap file)
+            name: domain
+            label: Domain
+            widget: string
+            required: false
+          - name: favicon
+            label: Favicon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: apple_touch_icon
+            label: Apple Touch Icon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: header_additional_content
+            label: Additional Content Header
+            hint: Content here will be placed before </head> tag
+            widget: text
+            required: false
+          - name: footer_additional_content
+            label: Additional Content Footer
+            hint: Content here will be placed before </body> tag
+            widget: text
+            required: false
+          - name: images_optimization
+            label: Images Optimization
+            widget: object
+            collapsed: false
+            fields:
+              - label: Image Formats
+                name: formats
+                widget: select
+                multiple: true
+                options:
+                  - label: Avif
+                    value: avif
+                  - label: Webp
+                    value: webp
+              - label: Image Dimensions
+                name: dimensions
+                widget: select
+                multiple: true
+                options:
+                  - label: '500'
+                    value: 500
+                  - label: '800'
+                    value: 800
+                  - label: '1080'
+                    value: 1080
+                  - label: '1600'
+                    value: 1600
+                  - label: '2000'
+                    value: 2000
+                  - label: '2600'
+                    value: 2600
+      - label: Colors
+        name: colors
+        file: cms/_data/colors.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Colors
+      - label: Texts
+        name: texts
+        file: cms/_data/texts.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Texts
+          - hint: 'Original text: contact us, key: 8556e9e'
+            label: Text
+            name: 8556e9e
+            widget: string
+          - hint: 'Original text: abc featured one of a kind, key: -67b439d2'
+            label: Text
+            name: '-67b439d2'
+            widget: string
+          - hint: 'Original text: rugs, key: 35966f'
+            label: Text
+            name: 35966f
+            widget: string
+          - hint: 'Original text: Fresco, key: 7de95886'
+            label: Text
+            name: 7de95886
+            widget: string
+          - hint: >-
+              Original text: Hints of the past reimagined anew, our Fresco rugs
+              are vintage pieces sourced from Turkey + Pakistan and meticulously
+              transformed through sun fading and shearing into dreamy pastel
+              palettes styled with a modern distressed finish., key: -5f09ffc7
+            label: Text
+            name: '-5f09ffc7'
+            widget: text
+          - hint: 'Original text: Shop Collection, key: 58636a08'
+            label: Text
+            name: 58636a08
+            widget: string
+          - hint: 'Original text: Samoke, key: -6cd3a216'
+            label: Text
+            name: '-6cd3a216'
+            widget: string
+          - hint: >-
+              Original text: A designer favorite, Samoke rugs render vintage
+              motifs abstract through expert application of the highest quality
+              silk and up to 30 varieties of each tone., key: -7987ae72
+            label: Text
+            name: '-7987ae72'
+            widget: text
+          - hint: 'Original text: Color Reform, key: 5c09bd14'
+            label: Text
+            name: 5c09bd14
+            widget: string
+          - hint: >-
+              Original text: Drenched in rich pigment, Color Reform rugs feature
+              a myriad of iconic rug designs reborn through chromatic color. The
+              reformative process evolved over years to feature rugs made from
+              wool, handspun silk, recycled sari silk, and linen., key: -c2993b8
+            label: Text
+            name: '-c2993b8'
+            widget: text
+          - hint: 'Original text: Sabideh, key: -2e3e774e'
+            label: Text
+            name: '-2e3e774e'
+            widget: string
+          - hint: >-
+              Original text: Hand-selected antique rugs from Turkey are
+              meticulously reformed over a cyclical process of washing, sunning,
+              and shearing. The organic reactions from the vegetable dyes
+              re-activate, composing distinctly delightful centerpiece rugs.,
+              key: 64bde0b0
+            label: Text
+            name: 64bde0b0
+            widget: text
+          - hint: 'Original text: Casablanca, key: 7fe4dee1'
+            label: Text
+            name: 7fe4dee1
+            widget: string
+          - hint: >-
+              Original text: Woven without a design graph by the Berber weavers
+              of the Atlas Mountains, our authentic Moroccan rugs are imbued
+              with ancient wisdom, saturated organic color, and the bold spirit
+              of the minimalist design., key: 5bab8211
+            label: Text
+            name: 5bab8211
+            widget: text
+          - hint: 'Original text: Kilims, key: -7a0a359f'
+            label: Text
+            name: '-7a0a359f'
+            widget: string
+          - hint: >-
+              Original text: Cultivated over several years by our Turkish
+              partners, these rare vintage rugs feature Anatolian motifs in
+              dreamy, earth-toned palettes that provide warmth and a sense of
+              culture to a living space., key: -74956f15
+            label: Text
+            name: '-74956f15'
+            widget: text
+          - hint: 'Original text: Samsara, key: -2d9ef2c4'
+            label: Text
+            name: '-2d9ef2c4'
+            widget: string
+          - hint: >-
+              Original text: An homage to the Sanskrit word for rebirth, Samsara
+              rugs feature a new, closed-loop process that upcycles forgotten
+              oversized vintage carpets into hundreds of smaller-sized rugs and
+              infuses them with vibrant color., key: 102fde26
+            label: Text
+            name: 102fde26
+            widget: text
+          - hint: 'Original text: Blast, key: 3d4a1d8'
+            label: Text
+            name: 3d4a1d8
+            widget: string
+          - hint: >-
+              Original text: Artfully textured rugs handcrafted by a unique
+              reductive process that harnesses sand to unearth hidden tonalities
+              & textures below the foundation. A unique multi-dimensional look
+              and feel in a range of designs & colors., key: -3b133dbc
+            label: Text
+            name: '-3b133dbc'
+            widget: text
+          - hint: 'Original text: Sample Featured Product, key: 55df0693'
+            label: Text
+            name: 55df0693
+            widget: string
+          - hint: >-
+              Original text: An homage to the Sanskrit word for rebirth, the
+              Samsara collection introduces a new, closed-loop process that
+              upcycles forgotten oversized vintage carpets into hundreds of
+              colorful and smaller-sized rugs., key: e86682a
+            label: Text
+            name: e86682a
+            widget: text
+          - hint: >-
+              Original text: Collaborating closely with a long-time artisanal
+              partner in Pakistan, each hand-knotted Samsara rug is individually
+              tailored and revitalized through a combination of restorative
+              processes. With no matter wasted, the Samsara rugs assume the
+              ancient axiom that they too will be born again through cycles of
+              change., key: 35ae696a
+            label: Text
+            name: 35ae696a
+            widget: text
+          - hint: 'Original text: book an appointment, key: 2326f643'
+            label: Text
+            name: 2326f643
+            widget: string
+          - hint: 'Original text: request a booking, key: -745adcb7'
+            label: Text
+            name: '-745adcb7'
+            widget: string
+          - hint: 'Original text: Name, key: 24eeab'
+            label: Text
+            name: 24eeab
+            widget: string
+          - hint: 'Original text: Email Address, key: -2b7010d0'
+            label: Text
+            name: '-2b7010d0'
+            widget: string
+          - hint: 'Original text: MORE INFORMATION, key: 21cf90c1'
+            label: Text
+            name: 21cf90c1
+            widget: string
+          - hint: >-
+              Original text: Thank you! Your submission has been received!, key:
+              5a0ea5a1
+            label: Text
+            name: 5a0ea5a1
+            widget: string
+          - hint: >-
+              Original text: Oops! Something went wrong while submitting the
+              form., key: -7c112e99
+            label: Text
+            name: '-7c112e99'
+            widget: string
+      - label: Links
+        name: links
+        file: cms/_data/links.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Links
+          - hint: 'Original link: #, key: 23'
+            label: Link
+            name: '23'
+            widget: string
+          - hint: 'Original link: #contact, key: 6c80469d'
+            label: Link
+            name: 6c80469d
+            widget: string
+          - hint: >-
+              Original link: https://pos-abc.myshopify.com/collections/fresco,
+              key: e129476
+            label: Link
+            name: e129476
+            widget: string
+          - hint: >-
+              Original link: https://pos-abc.myshopify.com/collections/samoke,
+              key: 235599da
+            label: Link
+            name: 235599da
+            widget: string
+          - hint: >-
+              Original link: https://pos-abc.myshopify.com/collections/samsara,
+              key: 475f4f4c
+            label: Link
+            name: 475f4f4c
+            widget: string
+          - hint: >-
+              Original link: https://pos-abc.myshopify.com/collections/blast,
+              key: -7363d818
+            label: Link
+            name: '-7363d818'
+            widget: string
+      - label: Images
+        name: images
+        file: cms/_data/images.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Images
+          - label: Image
+            name: i77fe11ca
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4b12fc96
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3a8fb5b2
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 47b15f56
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i58daaee2
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i35391be5
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i4c258465
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 60b7b976
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i292609c8
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-77fe11ca'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4086cd1d
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+publish_mode: editorial_workflow
